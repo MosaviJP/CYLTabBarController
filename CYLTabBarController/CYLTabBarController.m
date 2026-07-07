@@ -1468,6 +1468,22 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
     
 @end
 
+// App root 可能是自定义容器，真正的 CYLTabBarController 作为子控制器挂载在内部。
+// 当关联对象和 parent 链都找不到时，最后递归查找 child view controllers。
+static CYLTabBarController *CYLFindTabBarControllerInViewController(UIViewController *viewController) {
+    UIViewController *currentViewController = [viewController cyl_getViewControllerInsteadOfNavigationController];
+    if ([currentViewController isKindOfClass:[CYLTabBarController class]]) {
+        return (CYLTabBarController *)currentViewController;
+    }
+    for (UIViewController *childViewController in currentViewController.childViewControllers) {
+        CYLTabBarController *tabBarController = CYLFindTabBarControllerInViewController(childViewController);
+        if (tabBarController) {
+            return tabBarController;
+        }
+    }
+    return nil;
+}
+
 @implementation NSObject (CYLTabBarControllerReferenceExtension)
 
 - (void)cyl_setTabBarController:(CYLTabBarController *)tabBarController {
@@ -1494,10 +1510,8 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
     }
 
     UIViewController *rootViewController = [CYLGetRootViewController() cyl_getViewControllerInsteadOfNavigationController];;
-    if ([rootViewController isKindOfClass:[CYLTabBarController class]]) {
-        tabBarController = (CYLTabBarController *)rootViewController;
-    }
-    return tabBarController;
+    // root 可能只是业务容器，继续向 child view controllers 查找真实的 CYLTabBarController。
+    return CYLFindTabBarControllerInViewController(rootViewController);
 }
     
 @end

@@ -112,11 +112,16 @@
  *  @return view
  */
 - (UIView *)cyl_getActualBadgeSuperView {
-    UIControl *tabButton = [self cyl_tabButton];
+    // iOS26 液态玻璃下可见按钮在 SelectedContentView 内，badge 需要优先挂到选中层。
+    UIControl *tabButton = self.cyl_selectedTabButton ?: self.cyl_tabButton;
     return [self cyl_getActualBadgeSuperViewFromControl:tabButton];
 }
 
 - (UIView *)cyl_getActualBadgeSuperViewFromControl:(UIControl *)tabButton {
+    // tabBarItem 的 view 可能还未创建，避免后续从 nil 或非 UIControl 上取子视图。
+    if (![tabButton isKindOfClass:[UIControl class]]) {
+        return nil;
+    }
     // badge label will be added onto imageView
     //只有在TabBar选中状态下才能取到SwappableImageView
     UIImageView *tabImageView = [tabButton cyl_tabImageView];
@@ -134,6 +139,10 @@
             break;
         }
     } while (NO);
+    // iOS26 的 selected control 有时取不到可见 image/lottie，直接挂到 control 自身兜底。
+    if (!actualBadgeSuperView && !tabButton.cyl_isInvisiable) {
+        actualBadgeSuperView = tabButton;
+    }
     if (actualBadgeSuperView) {
         [actualBadgeSuperView setClipsToBounds:NO];
     }
@@ -319,4 +328,3 @@
 }
 
 @end
-
