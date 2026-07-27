@@ -2363,10 +2363,7 @@ if (_cyl_tabBar && [_cyl_tabBar isKindOfClass:[CYLFlatDesignTabBar class]]) {
     UIViewController *selectedViewController;
     if (self.viewControllers && self.viewControllers.count > 0 && self.viewControllers.count > selectedIndex) {
         selectedViewController = [self.viewControllers objectAtIndex:selectedIndex];
-        _selectedViewController = selectedViewController;
-    }
-    if (![CYLConstants isLiquidGlassActive]) {
-        return;
+        self.selectedViewController = selectedViewController;
     }
     //  iOS26 液态玻璃样式 不再使用点击事件， 而是在 `-setSelectedViewController` and `-setSelectedIndex`中处理
     // 代码切换 tab 时会触发

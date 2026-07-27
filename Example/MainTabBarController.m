@@ -190,9 +190,9 @@ static CGFloat const CYLTabBarControllerHeight = 40.f;
  *  更多TabBar自定义设置：比如：tabBarItem 的选中和不选中文字和背景图片属性、tabbar 背景图片属性等等
  */
 - (void)customizeTabBarAppearanceWithTitlePositionAdjustment:(UIOffset)titlePositionAdjustment {
-    if ([CYLConstants isLiquidGlassActive]) {
-        return;
-    }
+//    if ([CYLConstants isLiquidGlassActive]) {
+//        return;
+//    }
     // Customize UITabBar height
     // 自定义 TabBar 高度
 //     [self cyl_tabBarController].tabBarHeight = CYL_IS_IPHONE_X ? 65 : 40;
@@ -609,8 +609,8 @@ NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：index%@ title%@",
     
     //添加仿淘宝tabbar，第一个tab选中后有图标覆盖
     if ([control cyl_isTabButton] || [control cyl_isPlusButton]) {
-        BOOL shouldSelectedCoverShow = (self.selectedIndex == 0);
-        [self setSelectedCoverShow:shouldSelectedCoverShow];
+//        BOOL shouldSelectedCoverShow = (self.selectedIndex == 0);
+//        [self setSelectedCoverShow:shouldSelectedCoverShow];
     }
 }
 //缩放动画
