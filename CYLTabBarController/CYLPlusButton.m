@@ -205,6 +205,10 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
 
 + (UIButton *)selectedContentView {
     Class<CYLPlusButtonSubclassing> class = self;
+    if (CYLExternPlusButton) {
+        // 不使用selected 以避免选中背景
+        CYLExternPlusButton.highlighted = YES;
+    }
     UIButton<CYLPlusButtonSubclassing> *plusButton = [class plusButton];
     if (NO == plusButton.cyl_userInteractionDisabled) {
         // 不使用selected 以避免选中背景
@@ -249,6 +253,20 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
     }
     _selectedContentView = selectedContentView;
     return _selectedContentView;
+}
+
+- (void)setTabLabelHidden:(BOOL)hidden {
+    if (![CYLConstants isLiquidGlassActive]) {
+        return;
+    }
+    if (!CYLExternPlusButton || !CYLPlusChildViewController) {
+        return;
+    }
+    if (!CYLExternPlusButton.cyl_tabLabel || 0 == CYLExternPlusButton.cyl_tabLabel.text.length ) {
+        return;
+    }
+    [CYLExternPlusButton.cyl_tabLabel cyl_setHidden:hidden];
+    [CYLExternPlusButton.selectedContentView.cyl_tabLabel cyl_setHidden:!hidden];
 }
 
 + (UIImage *)contentImage {

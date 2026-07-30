@@ -694,16 +694,31 @@ UISearchTab 会从 TabBar 分离出来单独显示。
     CGPoint location = [gestureRecognizer locationInView:self];
     UIView *hitView = [self hitTest:location withEvent:nil];
     SEL actin = @selector(tabChangedToControl:);
-    if (([self hasPlusChildViewController] && [self hasPlusButton]) && ([hitView isKindOfClass:[CYLPlusButton class]] && CYLExternPlusButton.cyl_tabLabel.text.length > 0)) {
-        [CYLExternPlusButton.cyl_tabLabel cyl_setHidden:NO];
+    CYLTabBarController *tabBarController = self.cyl_tabBarController;
+    if (self.delegate && [self.delegate isKindOfClass:[CYLTabBarController class]]) {
+        tabBarController = (CYLTabBarController *)self.delegate;
     }
-    if (([hitView cyl_isTabButton] || [hitView isKindOfClass:[CYLPlusButton class]] ) && [self.cyl_tabBarController respondsToSelector:actin]) {
+    if (([self hasPlusChildViewController] && [self hasPlusButton]) && ([hitView isKindOfClass:[CYLPlusButton class]] && CYLExternPlusButton.cyl_tabLabel.text.length > 0)) {
+                SEL action = @selector(tabBarController:shouldSelectViewController:);
+        BOOL shouldSelectViewController;
+        CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS(
+                                                
+                                                
+                                                shouldSelectViewController = [tabBarController performSelector:action withObject:tabBarController withObject:CYLPlusChildViewController];
+                                                
+        
+        );
+        if (shouldSelectViewController) {
+            [CYLExternPlusButton setTabLabelHidden:NO];
+        }
+    }
+    if (([hitView cyl_isTabButton] || [hitView isKindOfClass:[CYLPlusButton class]] ) && [tabBarController respondsToSelector:actin]) {
         CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS
         (
          UIControl *control = (UIControl *)hitView;
          if (control.selected) {
              //FIX: iOS26 无法追加点击事件， 导致无法在选中状态下， 二次点击回调, 被系统手势拦截需要禁用特定手势，因为手势优先级高于 ControlEvents;
-             [self.cyl_tabBarController performSelector:actin withObject:control];
+             [tabBarController performSelector:actin withObject:control];
          }
          )
     }
@@ -712,10 +727,10 @@ UISearchTab 会从 TabBar 分离出来单独显示。
         // 即使 PlusButton 也添加了点击事件，点击 PlusButton 后也会触发该代理方法。
         // 可在PlusButton初始化时使用 CYLExternPlusButton.cyl_userInteractionDisabled = YES; 来禁止该协议方法触发plusButton回调
         if (!CYLExternPlusButton.cyl_userInteractionDisabled) {
-            if ([self.cyl_tabBarController respondsToSelector:actin]) {
+            if ([tabBarController respondsToSelector:actin]) {
                 CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS
                 (
-                 [self.cyl_tabBarController performSelector:actin withObject:CYLExternPlusButton];
+                 [tabBarController performSelector:actin withObject:CYLExternPlusButton];
                  
                  )
             }

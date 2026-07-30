@@ -8,6 +8,11 @@
 
 #import "CYLPlusButtonSubclass.h"
 #import "CYLMainRootViewController.h"
+#if __has_include(<CYLTabBarController/CYLTabBarController.h>)
+#import <CYLTabBarController/UIColor+CYLTabBarControllerExtention.h>
+#else
+#import "UIColor+CYLTabBarControllerExtention.h"
+#endif
 @interface CYLPlusButtonSubclass () {
     CGFloat _buttonImageHeight;
 }
@@ -73,40 +78,46 @@
     UIImage *hlightButtonImage = [self selectedContentImage];
     
     [button setImage:normalButtonImage forState:UIControlStateNormal];
-    [button setImage:hlightButtonImage forState:UIControlStateHighlighted];
-    [button setImage:hlightButtonImage forState:UIControlStateSelected];
+    [button setImage:hlightButtonImage forState:(UIControlStateHighlighted | UIControlStateSelected)];
     
     button.contentMode = UIViewContentModeCenter;
     button.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    
+
+    // 选中后再按下（selected + highlighted）时的标题颜色
+    UIColor *selectedHighlightedTitleColor = [UIColor cyl_systemGreenColor];
+    BOOL isSelectedAndHighlighted = (button.isSelected || button.isHighlighted) || ((CYLExternPlusButton.isSelected || CYLExternPlusButton.isHighlighted));
+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 150000
     if (@available(iOS 15.0, *)) {
         UIButtonConfiguration *config = [UIButtonConfiguration plainButtonConfiguration];
         config.baseBackgroundColor = [UIColor clearColor];
-        config.baseForegroundColor = [UIColor labelColor]; // ← 加这一行，控制图片 tint 和文字颜色
-        
+        config.baseForegroundColor = isSelectedAndHighlighted ? selectedHighlightedTitleColor : [UIColor labelColor]; // ← 加这一行，控制图片 tint 和文字颜色
+
         // ===== 核心：图片在上，文字在下 =====
         config.imagePlacement = NSDirectionalRectEdgeTop;
         //        config.imagePadding = 1.0;
-        
+
         // 字体
         UIFont *font = [UIFont systemFontOfSize:9.5];
+        // configuration 模式下 `-setTitleColor:forState:` 不生效，
+        // 颜色只能在 transformer 里给定。normal / selectedContentView 是两个独立实例，
+        // 各自在构造时就把颜色定死，避免依赖构造后才变化的 state。
         config.titleTextAttributesTransformer =
         ^NSDictionary<NSAttributedStringKey,id> *(NSDictionary<NSAttributedStringKey,id> *attrs) {
             NSMutableDictionary *m = [attrs mutableCopy];
             m[NSFontAttributeName] = font;
-            m[NSForegroundColorAttributeName] = [UIColor labelColor]; // ← 加这一行，直接覆盖颜色
+            m[NSForegroundColorAttributeName] = isSelectedAndHighlighted ? selectedHighlightedTitleColor : [UIColor labelColor];
             return [m copy];
         };
-        
+
         button.configuration = config;
-        
+
         // ===== 禁用高亮变暗效果 =====
         button.configurationUpdateHandler = ^(UIButton *btn) {
             btn.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
             btn.imageView.alpha = 1.0;
         };
-        
+
     } else
 #endif
     {
@@ -118,9 +129,11 @@
         button.titleLabel.font = [UIFont systemFontOfSize:9.5];
 #pragma clang diagnostic pop
     }
-    
+
     [button setTitle:@"发布" forState:UIControlStateNormal];
-    [button setTitle:@"发布" forState:UIControlStateSelected];
+    [button setTitle:@"发布" forState:(UIControlStateSelected | UIControlStateHighlighted)];
+    // iOS 15 以下走 titleColor，iOS 15+ 由上面的 transformer 接管（此处调用无副作用）
+    [button setTitleColor:selectedHighlightedTitleColor forState:(UIControlStateSelected | UIControlStateHighlighted)];
     //    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];   // ← 加这一行
     //    [button setTitleColor:[UIColor blackColor] forState:UIControlStateSelected]; // ← 加这一行
     //    [button setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted]; // ← 加这一行

@@ -1835,7 +1835,15 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
     
     [self updateSelectionStatusIfNeededForTabBarController:tabBarController shouldSelectViewController:viewController];
     } else {/**  CYLTabBarStyleTypeFlatDesign*/}
-    return viewController != self.selectedViewController;
+    BOOL should = viewController != self.selectedViewController;
+    if (should) {
+        if ([viewController isEqual:CYLPlusChildViewController] && ![self.tabBar isPlusButtonLayoutCentered]) {
+            [CYLExternPlusButton setTabLabelHidden:YES];
+        } else {
+            [CYLExternPlusButton setTabLabelHidden:NO];
+        }
+    }
+    return should;
 }
 
 - (BOOL)tabBarController:(CYLTabBarController *)tabBarController shouldShowPlatterLiquidLensViewForControl:(UIControl *)control {

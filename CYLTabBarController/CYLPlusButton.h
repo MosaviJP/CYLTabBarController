@@ -163,6 +163,7 @@ FOUNDATION_EXTERN UIViewController *CYLPlusChildViewController;
 - (CGFloat)constantOfPlusButtonCenterYOffsetForTabBarHeight:(CGFloat)tabBarHeight;
 
 + (NSUInteger)indexForTabbarItemsCount:(NSUInteger)tabbarItemsCount;
+- (void)setTabLabelHidden:(BOOL)hidden;
 
 @end
 
