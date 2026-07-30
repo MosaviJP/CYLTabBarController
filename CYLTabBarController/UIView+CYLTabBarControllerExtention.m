@@ -200,7 +200,10 @@
     }
     NSString *classString = NSStringFromClass([self class]);
     isKindOfLabel = [classString hasSuffix:@"Label"] && [classString containsString:@"TabButton"] && [classString containsString:@"_UI"];
-    return isKindOfLabel;
+    if (isKindOfLabel) {
+        return isKindOfLabel;
+    }
+    return [self isKindOfClass:[UILabel class]];
     
 }
 

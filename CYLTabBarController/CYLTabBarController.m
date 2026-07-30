@@ -1798,6 +1798,7 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
     if (![self hasPlusChildViewController]) {
         return;
     }
+    
     BOOL isCurrentViewController = [viewController cyl_isEqualToViewController:CYLPlusChildViewController];
     BOOL shouldConfigureSelectionStatus = (!isCurrentViewController);
     
@@ -1844,6 +1845,7 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
     if (![self hasPlusChildViewController]) {
         return YES;
     }
+
     if ([tabBarController.selectedViewController isEqual:CYLPlusChildViewController] && ![tabBarController.tabBar isPlusButtonLayoutCentered]) {
         return NO;
     }

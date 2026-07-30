@@ -562,12 +562,13 @@ NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：index%@ title%@",
 
 - (BOOL)tabBarController:(CYLTabBarController *)tabBarController shouldShowPlatterLiquidLensViewForControl:(UIControl *)control {
     if ([tabBarController.selectedViewController isEqual:CYLPlusChildViewController] && ![self.tabBar isPlusButtonLayoutCentered]) {
-        CYLExternPlusButton.titleLabel.alpha = 0.5;
+        [CYLExternPlusButton.cyl_tabLabel cyl_setHidden:YES];
     } else {
-        [CYLExternPlusButton.titleLabel cyl_setHidden:NO];
+        [CYLExternPlusButton.cyl_tabLabel cyl_setHidden:NO];
     }
     return YES;
 }
+
 #pragma mark - CYLFlatDesignTabBarDelegate
 
 
