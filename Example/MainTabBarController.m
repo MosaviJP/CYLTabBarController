@@ -565,6 +565,8 @@ NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：index%@ title%@",
         [CYLExternPlusButton.cyl_tabLabel cyl_setHidden:YES];
     } else {
         [CYLExternPlusButton.cyl_tabLabel cyl_setHidden:NO];
+        CYLExternPlusButton.selectedContentView.cyl_tabLabel.textColor = [UIColor greenColor];
+        CYLExternPlusButton.selectedContentView.cyl_tabLabel.highlightedTextColor = [UIColor cyl_systemGreenColor];
     }
     return YES;
 }

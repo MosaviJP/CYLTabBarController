@@ -694,7 +694,9 @@ UISearchTab 会从 TabBar 分离出来单独显示。
     CGPoint location = [gestureRecognizer locationInView:self];
     UIView *hitView = [self hitTest:location withEvent:nil];
     SEL actin = @selector(tabChangedToControl:);
-    
+    if (([self hasPlusChildViewController] && [self hasPlusButton]) && ([hitView isKindOfClass:[CYLPlusButton class]] && CYLExternPlusButton.cyl_tabLabel.text.length > 0)) {
+        [CYLExternPlusButton.cyl_tabLabel cyl_setHidden:NO];
+    }
     if (([hitView cyl_isTabButton] || [hitView isKindOfClass:[CYLPlusButton class]] ) && [self.cyl_tabBarController respondsToSelector:actin]) {
         CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS
         (
