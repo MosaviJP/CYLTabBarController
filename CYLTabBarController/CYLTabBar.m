@@ -687,6 +687,7 @@ UISearchTab 会从 TabBar 分离出来单独显示。
 }
 
 //处理PlusButton事件响应优先级为最优。
+
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if (![CYLConstants isLiquidGlassActive] || ![self isKindOfClass:[CYLTabBar class]]) {
         return YES;
@@ -698,8 +699,10 @@ UISearchTab 会从 TabBar 分离出来单独显示。
     if (self.delegate && [self.delegate isKindOfClass:[CYLTabBarController class]]) {
         tabBarController = (CYLTabBarController *)self.delegate;
     }
+ 
     if (([self hasPlusChildViewController] && [self hasPlusButton]) && ([hitView isKindOfClass:[CYLPlusButton class]] && CYLExternPlusButton.cyl_tabLabel.text.length > 0)) {
-                SEL action = @selector(tabBarController:shouldSelectViewController:);
+                
+        SEL action = @selector(tabBarController:shouldSelectViewController:);
         BOOL shouldSelectViewController;
         CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS(
                                                 
@@ -708,8 +711,19 @@ UISearchTab 会从 TabBar 分离出来单独显示。
                                                 
         
         );
-        if (shouldSelectViewController) {
-            [CYLExternPlusButton setTabLabelHidden:NO];
+        SEL actionshouldShowPlatterLiquidLensViewForControl = @selector(tabBarController:shouldShowPlatterLiquidLensViewForControl:);
+        BOOL shouldShowPlatterLiquidLensViewForControl;
+        CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS(
+                                                
+                                                
+                                                shouldShowPlatterLiquidLensViewForControl = [tabBarController performSelector:actionshouldShowPlatterLiquidLensViewForControl withObject:tabBarController withObject:CYLExternPlusButton];
+                                                
+        
+        );
+        if (shouldSelectViewController && shouldShowPlatterLiquidLensViewForControl && ![self isPlusButtonLayoutCentered] && [tabBarController.selectedViewController isEqual:CYLPlusChildViewController] ) {
+            if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+                [CYLExternPlusButton setTabLabelHidden:NO];
+            }
         }
     }
     if (([hitView cyl_isTabButton] || [hitView isKindOfClass:[CYLPlusButton class]] ) && [tabBarController respondsToSelector:actin]) {
