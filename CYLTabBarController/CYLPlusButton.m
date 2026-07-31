@@ -262,6 +262,9 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
     if (!CYLExternPlusButton || !CYLPlusChildViewController) {
         return;
     }
+    if (CYLExternPlusButton.cyl_keepShowingPlusButtonLabel) {
+        return;
+    }
     if (!CYLExternPlusButton.cyl_tabLabel || 0 == CYLExternPlusButton.cyl_tabLabel.text.length ) {
         return;
     }

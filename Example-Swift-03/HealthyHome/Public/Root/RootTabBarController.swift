@@ -7,14 +7,17 @@
 //
 
 import UIKit
+import CYLTabBarController
 
 class RootTabBarController: CYLTabBarController {
     
 
     override func viewDidLoad() {
-        
+
         super.viewDidLoad()
-        
+
+        self.delegate = self
+
         customizeInterface()
     }
     
@@ -49,11 +52,17 @@ class RootTabBarController: CYLTabBarController {
 }
 
 extension RootTabBarController {
-    
-    override func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        
-        updateSelectionStatusIfNeeded(for: tabBarController, shouldSelect: viewController)
-        
+
+    func tabBarController(_ tabBarController: CYLTabBarController, shouldSelect viewController: UIViewController) -> Bool {
+
+        super.tabBarController(tabBarController, shouldSelect: viewController)
+
+        return true
+    }
+
+    override func tabBarController(_ tabBarController: CYLTabBarController, shouldShowPlatterLiquidLensViewFor control: UIControl) -> Bool {
+//        return super.tabBarController(tabBarController, shouldShowPlatterLiquidLensViewFor: control)
         return true
     }
 }
+

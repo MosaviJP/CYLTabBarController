@@ -29,7 +29,7 @@ class CYLPlusButtonSubclass: CYLPlusButton, CYLPlusButtonSubclassing {
         
         button.adjustsImageWhenHighlighted = false
         button.sizeToFit()
-        
+        button.cyl_keepShowingPlusButtonLabel = true
 //        button.titleEdgeInsets = UIEdgeInsets(top: 3, left: 0, bottom: 0, right: 0)
         
         return button
@@ -65,6 +65,11 @@ class CYLPlusButtonSubclass: CYLPlusButton, CYLPlusButtonSubclassing {
     static func multiplier(ofTabBarHeight tabBarHeight: CGFloat) -> CGFloat {
         return 0.3
     }
+    
+        static func constantOfPlusButtonCenterYOffsetForTabBarHeight(tabBarHeight: CGFloat) -> CGFloat {
+                return -10
+            }
+   
     
     /*!
     * 见 `+multiplierOfTabBarHeight:` 注释：

@@ -61,6 +61,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (UIView *)cyl_findBarButtonContentView;
 
+@property (nonatomic, assign, getter=cyl_keepShowingPlusButtonLabel, setter=cyl_setKeepShowingPlusButtonLabel:) BOOL cyl_keepShowingPlusButtonLabel;
+
 @end
 
 NS_ASSUME_NONNULL_END

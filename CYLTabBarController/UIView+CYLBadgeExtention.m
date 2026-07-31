@@ -86,6 +86,16 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
     [self cyl_showBadgeValue:value animationType:CYLBadgeAnimationTypeNone];
 }
 
+- (BOOL)cyl_keepShowingPlusButtonLabel {
+    NSNumber *keepShowingPlusButtonLabelObject = objc_getAssociatedObject(self, @selector(cyl_keepShowingPlusButtonLabel));
+    return [keepShowingPlusButtonLabelObject boolValue];
+}
+
+- (void)cyl_setKeepShowingPlusButtonLabel:(BOOL)keepShowingPlusButtonLabel {
+    NSNumber *keepShowingPlusButtonLabelObject = @(keepShowingPlusButtonLabel);
+    objc_setAssociatedObject(self, @selector(cyl_keepShowingPlusButtonLabel), keepShowingPlusButtonLabelObject, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 #pragma mark -- private methods
 /**
  By swizzling the original method - (void)willMoveToSuperview:(UIView *)newSuperview;
