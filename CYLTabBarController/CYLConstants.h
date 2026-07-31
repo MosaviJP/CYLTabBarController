@@ -12,9 +12,12 @@
 #import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 
+// 必须在 `__has_include` 之外，否则未引入 CYLFlatDesignTabBar 子库的
+// subspec（如 LottieSwift）看不到该前向声明，会报 "expected a type"。
+@class CYLTabBarController;
+
 #if __has_include(<CYLTabBarController/CYLFlatDesignTabBar.h>)
 
-@class CYLTabBarController;
 @class CYLFlatDesignTabBar;
 
 @protocol CYLFlatDesignUITabBarControllerDelegate <UITabBarControllerDelegate>

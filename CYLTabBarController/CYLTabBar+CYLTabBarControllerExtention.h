@@ -10,6 +10,8 @@
 #import "CYLTabBar.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@class CYLTabBarController;
+
 @interface UITabBar (CYLTabBarControllerExtention)
 
 - (CGFloat)cyl_fullHeight;

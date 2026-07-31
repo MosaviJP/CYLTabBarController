@@ -1779,8 +1779,23 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
 - (void)updateSelectionStatusIfNeededForTabBarController:(UITabBarController *)tabBarController
                               shouldSelectViewController:(UIViewController *)viewController {
     CYL_IF_NOT_FLATDESIGN_BEGIN     //Not CYLTabBarStyleTypeFlatDesign
-    [self updateSelectionStatusIfNeededForTabBarController:tabBarController shouldSelectViewController:viewController shouldSelect:YES];
-} else {/**  CYLTabBarStyleTypeFlatDesign*/}
+    BOOL should = viewController != tabBarController.selectedViewController;
+    [self updateSelectionStatusIfNeededForTabBarController:tabBarController shouldSelectViewController:viewController shouldSelect:should];
+    CYLTabBar *tabBar = (CYLTabBar *)tabBarController.tabBar;
+    if (should && [tabBar cyl_shouldUpdateHiddenStatueForPlusButtonLabel]) {
+        if ([viewController isEqual:CYLPlusChildViewController]) {
+            [CYLExternPlusButton setTabLabelHidden:YES];
+        } else {
+            [CYLExternPlusButton setTabLabelHidden:NO];
+        }
+    }
+    if ([tabBarController.selectedViewController isEqual:CYLPlusChildViewController] && [tabBar cyl_shouldUpdateHiddenStatueForPlusButtonLabel]) {
+        if (!should) {
+            [CYLExternPlusButton setTabLabelHidden:YES];
+        }
+    }
+
+    } else {/**  CYLTabBarStyleTypeFlatDesign*/}
 }
 
 - (void)updateSelectionStatusIfNeededForTabBarController:(UITabBarController *)tabBarController
@@ -1836,20 +1851,10 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
     [self updateSelectionStatusIfNeededForTabBarController:tabBarController shouldSelectViewController:viewController];
     } else {/**  CYLTabBarStyleTypeFlatDesign*/}
 
-    CYLTabBar *tabBar = (CYLTabBar *)tabBarController.tabBar;
+
     BOOL should = viewController != tabBarController.selectedViewController;
-    if (should && [tabBar cyl_shouldUpdateHiddenStatueForPlusButtonLabel]) {
-        if ([viewController isEqual:CYLPlusChildViewController]) {
-            [CYLExternPlusButton setTabLabelHidden:YES];
-        } else {
-            [CYLExternPlusButton setTabLabelHidden:NO];
-        }
-    }
-    if ([tabBarController.selectedViewController isEqual:CYLPlusChildViewController] && [tabBar cyl_shouldUpdateHiddenStatueForPlusButtonLabel]) {
-        if (!should) {
-            [CYLExternPlusButton setTabLabelHidden:YES];
-        }
-    }
+    
+
     return should;
 }
 
