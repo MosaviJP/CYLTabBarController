@@ -562,7 +562,7 @@ NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：index%@ title%@",
 
 - (BOOL)tabBarController:(CYLTabBarController *)tabBarController shouldShowPlatterLiquidLensViewForControl:(UIControl *)control {
     BOOL shouldShowPlatterLiquidLensViewForControl = [super tabBarController:tabBarController shouldShowPlatterLiquidLensViewForControl:control];
-    return shouldShowPlatterLiquidLensViewForControl;
+    return YES;
 }
 
 #pragma mark - CYLFlatDesignTabBarDelegate

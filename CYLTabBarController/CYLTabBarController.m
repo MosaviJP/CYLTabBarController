@@ -1835,12 +1835,19 @@ CYL_DEPRECATED_IGNORED_IMPLEMENTATIONS_POP
     
     [self updateSelectionStatusIfNeededForTabBarController:tabBarController shouldSelectViewController:viewController];
     } else {/**  CYLTabBarStyleTypeFlatDesign*/}
-    BOOL should = viewController != self.selectedViewController;
-    if (should) {
-        if ([viewController isEqual:CYLPlusChildViewController] && ![self.tabBar isPlusButtonLayoutCentered]) {
+
+    CYLTabBar *tabBar = (CYLTabBar *)tabBarController.tabBar;
+    BOOL should = viewController != tabBarController.selectedViewController;
+    if (should && [tabBar cyl_shouldUpdateHiddenStatueForPlusButtonLabel]) {
+        if ([viewController isEqual:CYLPlusChildViewController]) {
             [CYLExternPlusButton setTabLabelHidden:YES];
         } else {
             [CYLExternPlusButton setTabLabelHidden:NO];
+        }
+    }
+    if ([tabBarController.selectedViewController isEqual:CYLPlusChildViewController] && [tabBar cyl_shouldUpdateHiddenStatueForPlusButtonLabel]) {
+        if (!should) {
+            [CYLExternPlusButton setTabLabelHidden:YES];
         }
     }
     return should;

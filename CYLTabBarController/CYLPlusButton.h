@@ -125,10 +125,6 @@ if ([tabBarController.selectedViewController isEqual:CYLPlusChildViewController]
 
 + (BOOL)matchedTabBarContext:(NSString *)tabBarContext;
 
-#pragma mark - Deprecated API
-
-+ (CGFloat)multiplerInCenterY CYL_DEPRECATED("Deprecated in 1.6.0. Use `+multiplierOfTabBarHeight:` instead.");
-
 @end
 
 @class CYLTabBar;
@@ -172,6 +168,8 @@ FOUNDATION_EXTERN UIViewController *CYLPlusChildViewController;
 @interface CYLPlusButton (CYLPlusButtonDeprecated)
 
 + (void)registerSubclass CYL_DEPRECATED("Deprecated in 1.6.0. Use `+[CYLPlusButton registerPlusButton]` instead.");
+
++ (CGFloat)multiplerInCenterY CYL_DEPRECATED("Deprecated in 1.6.0. Use `+multiplierOfTabBarHeight:` instead.");
 
 @end
 

@@ -56,6 +56,7 @@ typedef void(^CYLTabBarDidLayoutSubViewsBlock)(CYLTabBar *tabBar);
 - (BOOL)hasPlusButton;
 - (BOOL)hasPlusChildViewController;
 - (BOOL)isPlusButtonLayoutCentered;
+- (CYLTabBarController *)tabBarController;
 
 @end
 

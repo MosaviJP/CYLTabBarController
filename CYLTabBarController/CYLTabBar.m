@@ -686,6 +686,14 @@ UISearchTab 会从 TabBar 分离出来单独显示。
     [super addGestureRecognizer:gestureRecognizer];
 }
 
+- (CYLTabBarController *)tabBarController {
+    CYLTabBarController *tabBarController = self.cyl_tabBarController;
+    if (self.delegate && [self.delegate isKindOfClass:[CYLTabBarController class]]) {
+        tabBarController = (CYLTabBarController *)self.delegate;
+    }
+    return tabBarController;
+}
+
 //处理PlusButton事件响应优先级为最优。
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
@@ -695,36 +703,10 @@ UISearchTab 会从 TabBar 分离出来单独显示。
     CGPoint location = [gestureRecognizer locationInView:self];
     UIView *hitView = [self hitTest:location withEvent:nil];
     SEL actin = @selector(tabChangedToControl:);
-    CYLTabBarController *tabBarController = self.cyl_tabBarController;
-    if (self.delegate && [self.delegate isKindOfClass:[CYLTabBarController class]]) {
-        tabBarController = (CYLTabBarController *)self.delegate;
-    }
- 
-    if (([self hasPlusChildViewController] && [self hasPlusButton]) && ([hitView isKindOfClass:[CYLPlusButton class]] && CYLExternPlusButton.cyl_tabLabel.text.length > 0)) {
-                
-        SEL action = @selector(tabBarController:shouldSelectViewController:);
-        BOOL shouldSelectViewController;
-        CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS(
-                                                
-                                                
-                                                shouldSelectViewController = [tabBarController performSelector:action withObject:tabBarController withObject:CYLPlusChildViewController];
-                                                
-        
-        );
-        SEL actionshouldShowPlatterLiquidLensViewForControl = @selector(tabBarController:shouldShowPlatterLiquidLensViewForControl:);
-        BOOL shouldShowPlatterLiquidLensViewForControl;
-        CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS(
-                                                
-                                                
-                                                shouldShowPlatterLiquidLensViewForControl = [tabBarController performSelector:actionshouldShowPlatterLiquidLensViewForControl withObject:tabBarController withObject:CYLExternPlusButton];
-                                                
-        
-        );
-        if (shouldSelectViewController && shouldShowPlatterLiquidLensViewForControl && ![self isPlusButtonLayoutCentered] && [tabBarController.selectedViewController isEqual:CYLPlusChildViewController] ) {
-            if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-                [CYLExternPlusButton setTabLabelHidden:NO];
-            }
-        }
+    CYLTabBarController *tabBarController = [self tabBarController];
+    if ([self cyl_shouldUpdateHiddenStatueForPlusButtonLabel] && [hitView isKindOfClass:[CYLPlusButton class]] && [tabBarController.selectedViewController isEqual:CYLPlusChildViewController]) {
+        //如果在选中CYLPlusChildViewController的状态下，  重复点击，或者滑动手势，又选中CYLPlusChildViewController。 相当于重复点击CYLPlusChildViewController， 则不显示未选中状态的Label， 仅仅在切换到其他tab的情况下， 显示未选中状态的Label。 否则会出现Label重叠的情况。
+        [CYLExternPlusButton setTabLabelHidden:NO];  
     }
     if (([hitView cyl_isTabButton] || [hitView isKindOfClass:[CYLPlusButton class]] ) && [tabBarController respondsToSelector:actin]) {
         CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS

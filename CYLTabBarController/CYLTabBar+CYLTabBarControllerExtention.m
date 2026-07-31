@@ -136,7 +136,7 @@
 - (UIControl *)cyl_tabBarButtonWithTabIndex:(NSUInteger)tabIndex {
     UIControl *selectedControl = [self cyl_visibleControlWithIndex:tabIndex];
     
-    NSInteger plusViewControllerIndex = [self.cyl_tabBarController.viewControllers indexOfObject:CYLPlusChildViewController];
+    NSInteger plusViewControllerIndex = [self.tabBarController.viewControllers indexOfObject:CYLPlusChildViewController];
     BOOL isPlusViewControllerAdded = CYLPlusChildViewController.cyl_plusViewControllerEverAdded && (plusViewControllerIndex != NSNotFound);
     
     if (isPlusViewControllerAdded) {
@@ -341,6 +341,57 @@
 - (NSInteger)cyl_selectedIndex {
     NSInteger selectedIndex = self.cyl_selectedControl.cyl_tabBarItemVisibleIndex;
     return selectedIndex;
+}
+
+- (BOOL)cyl_shouldUpdateHiddenStatueForPlusButtonLabel {
+    CYLTabBarController *tabBarController = [self tabBarController];
+    return [self cyl_shouldUpdateHiddenStatueForPlusButtonLabelForTabBarController:tabBarController];
+}
+
+- (BOOL)cyl_shouldUpdateHiddenStatueForPlusButtonLabelForTabBarController:(CYLTabBarController *)theTabBarController {
+    if (![CYLConstants isLiquidGlassActive] || ![self isKindOfClass:[CYLTabBar class]]) {
+        return NO;
+    }
+    
+    CYLTabBarController *tabBarController = theTabBarController;
+    
+    if (!theTabBarController) {
+        tabBarController = [self tabBarController];
+    }
+    
+    CYLTabBar *tabBar = (CYLTabBar *)tabBarController.tabBar;
+    if (!tabBar) {
+        tabBar = self;
+    }
+    if (![tabBar hasPlusChildViewController]) {
+        return NO;
+    }
+    if (![tabBar hasPlusButton]) {
+        return NO;
+        
+    }
+    if (!CYLExternPlusButton.cyl_tabLabel) {
+        return NO;
+    }
+    if (CYLExternPlusButton.cyl_tabLabel.text.length == 0) {
+        return NO;
+    }
+    
+    SEL actionshouldShowPlatterLiquidLensViewForControl = @selector(tabBarController:shouldShowPlatterLiquidLensViewForControl:);
+    BOOL shouldShowPlatterLiquidLensViewForControl;
+    CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS(
+                                            
+                                            
+                                            shouldShowPlatterLiquidLensViewForControl = [tabBarController performSelector:actionshouldShowPlatterLiquidLensViewForControl withObject:tabBarController withObject:CYLExternPlusButton];
+                                            
+                                            
+                                            );
+    
+    //如果在选中CYLPlusChildViewController的状态下，  重复点击，或者滑动手势，又选中CYLPlusChildViewController。 相当于重复点击CYLPlusChildViewController， 则不显示未选中状态的Label， 仅仅在切换到其他tab的情况下， 显示未选中状态的Label。 否则会出现Label重叠的情况。
+    if (shouldShowPlatterLiquidLensViewForControl && ![tabBar isPlusButtonLayoutCentered]  ) {
+        return YES;
+    }
+    return NO;
 }
 
 @end
@@ -756,6 +807,8 @@
     }
     return view;
 }
+
+
 
 @end
 

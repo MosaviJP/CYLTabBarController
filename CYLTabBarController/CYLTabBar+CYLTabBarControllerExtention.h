@@ -80,7 +80,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)cyl_hasPlusChildViewController;
 - (CGFloat)cyl_cachedXOffsetWithIndex:(CGFloat)index;
 - (CGFloat)cyl_cachedWidthOffsetWithIndex:(CGFloat)index;
-
+- (BOOL)cyl_shouldUpdateHiddenStatueForPlusButtonLabel;
+- (BOOL)cyl_shouldUpdateHiddenStatueForPlusButtonLabelForTabBarController:(CYLTabBarController *)theTabBarController;
 
 @end
 
