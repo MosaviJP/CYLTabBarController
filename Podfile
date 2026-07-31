@@ -13,7 +13,6 @@ target 'CYLTabBarController' do
 #pod 'CYLTabBarController', :path => './'
 #pod 'CYLTabBarController/LottieObjectiveC', :path => './'
 #pod 'CYLTabBarController/LottieSwift', :path => './'
-
 pod 'CYLTabBarController/CYLFlatDesignTabBar', :path => './'
 
 pod 'MJRefresh'

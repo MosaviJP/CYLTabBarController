@@ -10,7 +10,6 @@
 #import "CYLTabBar.h"
 
 NS_ASSUME_NONNULL_BEGIN
-@class CYLTabBarController;
 
 @interface UITabBar (CYLTabBarControllerExtention)
 
@@ -83,7 +82,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGFloat)cyl_cachedXOffsetWithIndex:(CGFloat)index;
 - (CGFloat)cyl_cachedWidthOffsetWithIndex:(CGFloat)index;
 - (BOOL)cyl_shouldUpdateHiddenStatueForPlusButtonLabel;
-- (BOOL)cyl_shouldUpdateHiddenStatueForPlusButtonLabelForTabBarController:(CYLTabBarController *)theTabBarController;
 
 @end
 
