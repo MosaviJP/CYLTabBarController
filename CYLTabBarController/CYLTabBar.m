@@ -708,7 +708,9 @@ UISearchTab 会从 TabBar 分离出来单独显示。
         //如果在选中CYLPlusChildViewController的状态下，  重复点击，或者滑动手势，又选中CYLPlusChildViewController。 相当于重复点击CYLPlusChildViewController， 则不显示未选中状态的Label， 仅仅在切换到其他tab的情况下， 显示未选中状态的Label。 否则会出现Label重叠的情况。
         //TODO:   选中center按钮 长按玻璃遮罩 向左或者向右 稍微移动一点距离 回到原位center 按钮标题 会变模糊. 由于无法解决， 故暂时禁止在选中PlusVC时的 用户滑动手势。等未来找到合适方案再处理.
 //        [CYLExternPlusButton setTabLabelHidden:NO];
-        return NO;
+        if (!CYLExternPlusButton.cyl_keepShowingPlusButtonLabel) {
+            return NO;
+        }
     }
     if (([hitView cyl_isTabButton] || [hitView isKindOfClass:[CYLPlusButton class]] ) && [tabBarController respondsToSelector:actin]) {
         CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS
