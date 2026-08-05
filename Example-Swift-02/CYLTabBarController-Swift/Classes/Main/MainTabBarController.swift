@@ -68,10 +68,15 @@ class MainTabBarController: CYLTabBarController {
 extension MainTabBarController {
     
     override func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        self.updateSelectionStatusIfNeeded(for: tabBarController, shouldSelect: viewController)
+        super.tabBarController(tabBarController, shouldSelect: viewController)
         return true
     }
- 
+    
+    override func tabBarController(_ tabBarController: CYLTabBarController, shouldShowPlatterLiquidLensViewFor control: UIControl) -> Bool {
+//        return super.tabBarController(tabBarController, shouldShowPlatterLiquidLensViewFor: control)
+        return true
+    }
+    
     static func makeViewControllers() -> [UIViewController] {
         let home = UINavigationController(rootViewController: HomeViewController())
         let connection = UINavigationController(rootViewController: ConnectionViewController())

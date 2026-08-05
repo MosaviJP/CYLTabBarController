@@ -19,6 +19,8 @@ class RootTabBarController: CYLTabBarController {
         self.delegate = self
 
         customizeInterface()
+        CYLPlusChildViewController.view.layoutIfNeeded()
+
     }
     
     /// MARK:TabBard底部标签设置

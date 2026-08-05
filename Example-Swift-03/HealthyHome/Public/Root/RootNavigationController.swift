@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RootNavigationController: UINavigationController {
+class RootNavigationController: CYLBaseNavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +18,7 @@ class RootNavigationController: UINavigationController {
         //标题设置
         let dict: NSDictionary = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 15)]
         self.navigationBar.titleTextAttributes = dict as? [NSAttributedString.Key: AnyObject]
-        
+
     }
     
     
