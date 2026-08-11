@@ -1150,11 +1150,11 @@ A：用法见：https://github.com/ChenYilong/CYLTabBarController/issues/341
 ## Star History
 
 
-<a href="https://www.star-history.com/?type=date&repos=ChenYilong%2FCYLTabBarController">
+<a href="https://star-history.dera.page/#ChenYilong/CYLTabBarController&type=date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=ChenYilong/CYLTabBarController&type=date&theme=dark&legend=top-left&sealed_token=v5gBqXVRbiuFrVnb90BPhMvK9bDi7Al9yhKrbHqpeDBQuczF5_r1xVummm1NTyClIc5q0MX6xa_2tV5J1hNIljm9m9RbVvE8Juva5skkxkmLBZkxs_ELQw" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=ChenYilong/CYLTabBarController&type=date&legend=top-left&sealed_token=v5gBqXVRbiuFrVnb90BPhMvK9bDi7Al9yhKrbHqpeDBQuczF5_r1xVummm1NTyClIc5q0MX6xa_2tV5J1hNIljm9m9RbVvE8Juva5skkxkmLBZkxs_ELQw" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=ChenYilong/CYLTabBarController&type=date&legend=top-left&sealed_token=v5gBqXVRbiuFrVnb90BPhMvK9bDi7Al9yhKrbHqpeDBQuczF5_r1xVummm1NTyClIc5q0MX6xa_2tV5J1hNIljm9m9RbVvE8Juva5skkxkmLBZkxs_ELQw" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=ChenYilong/CYLTabBarController&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=ChenYilong/CYLTabBarController&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://star-history.dera.page/svg?repos=ChenYilong/CYLTabBarController&type=date&legend=top-left" />
  </picture>
 </a>
 
