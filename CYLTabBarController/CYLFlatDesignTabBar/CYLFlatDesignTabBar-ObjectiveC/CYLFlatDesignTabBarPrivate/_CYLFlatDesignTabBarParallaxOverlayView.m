@@ -8,6 +8,7 @@
 
 #import "_CYLFlatDesignTabBarParallaxOverlayView.h"
 #import "CYLTabBarController.h"
+#import "UIViewController+CYLTabBarControllerExtention.h"
 //#import "CYLFlatDesignUIViewController.h"
 #if __has_include(<CYLTabBarController/CYLTabBarController.h>)
 #import <CYLTabBarController/CYLTabBarController.h>

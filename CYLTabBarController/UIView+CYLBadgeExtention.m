@@ -13,7 +13,7 @@
 #import "CYLConstants.h"
 #import "UIView+CYLTabBarControllerExtention.h"
 #import "UIImage+CYLTabBarControllerExtention.h"
-#import "CYLTabBarBadgeView.h"
+#import "CYLBadge/CYLTabBarBadgeView.h"
 #if __has_include(<CYLTabBarController/CYLTabBarController.h>)
 #import <CYLTabBarController/CYLTabBarController.h>
 #else

@@ -13,6 +13,8 @@
 #ifndef CYLBadgeDemo_CYLBadgeProtocol_h
 #define CYLBadgeDemo_CYLBadgeProtocol_h
 
+#import <UIKit/UIKit.h>
+
 #pragma mark -- types definition
 
 #define CYLBadgeBreatheAnimationKey     @"cyl.badge.breathe"

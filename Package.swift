@@ -13,7 +13,17 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        .target(name: "CYLTabBarController", path: "CYLTabBarController")
+        .target(
+            name: "CYLTabBarController",
+            path: "CYLTabBarController",
+            exclude: ["LottieSwift"],
+            cSettings: [
+                .headerSearchPath("."),
+                .headerSearchPath("CYLBadge"),
+                .headerSearchPath("CYLFlatDesignTabBar/CYLFlatDesignTabBar-ObjectiveC/CYLFlatDesignTabBar"),
+                .headerSearchPath("CYLFlatDesignTabBar/CYLFlatDesignTabBar-ObjectiveC/CYLFlatDesignTabBarPrivate")
+            ]
+        )
     ],
     swiftLanguageVersions: [.v5]
 )
