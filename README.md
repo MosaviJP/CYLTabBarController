@@ -349,6 +349,23 @@ pod 'CYLTabBarController', '~> 1.24.0'
 
  关于 CocoaPods 的更多内容，您可以参考 [CocoaPods 文档](https://cocoapods.org/)。
 
+### 使用 Carthage 导入 CYLTabBarController（可选）
+
+除了 CocoaPods 和 Swift Package Manager，也可以通过 [Carthage](https://github.com/Carthage/Carthage) 集成本库。在 `Cartfile` 中添加：
+
+```
+github "ChenYilong/CYLTabBarController"
+```
+
+然后执行：
+
+```
+carthage update --use-xcframeworks
+```
+
+构建完成后，将生成的 `CYLTabBarController.xcframework` 拖入工程，并在 "Frameworks, Libraries, and Embedded Content" 中设置为 `Embed & Sign`。
+
+> 说明：Carthage 构建的是不含 Lottie 动画相关文件（`LottieSwift` 目录）的核心功能集，与 CocoaPods 的 `Core`子规范（subspec）范围一致。
 
 ###  第二步：设置CYLTabBarController的两个数组：控制器数组和TabBar属性数组
 
