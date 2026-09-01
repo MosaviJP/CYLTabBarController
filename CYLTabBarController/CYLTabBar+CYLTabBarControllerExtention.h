@@ -10,6 +10,7 @@
 #import "CYLTabBar.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface UITabBar (CYLTabBarControllerExtention)
 
 - (CGFloat)cyl_fullHeight;
@@ -39,7 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak, getter=cyl_platterView, setter=cyl_setPlatterView:) UIView *cyl_platterView;
 @property (nonatomic, weak, getter=cyl_portalView, setter=cyl_setPortalView:) UIView *cyl_portalView;
 @property (nonatomic, weak, getter=cyl_platterContentView, setter=cyl_setPlatterContentView:) UIView *cyl_platterContentView;
-
 @property (nonatomic, assign, getter=cyl_platterViewWidth, setter=cyl_setPlatterViewWidth:) CGFloat cyl_platterViewWidth;
 @property (nonatomic, strong, getter=cyl_platterViewSize, setter=cyl_setPlatterViewSize:) NSValue *cyl_platterViewSize;
 @property (nonatomic, weak, getter=cyl_portalLayer, setter=cyl_setPortalLayer:) CALayer *cyl_portalLayer;
@@ -53,7 +53,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CYLTabBar (CYLTabBarControllerExtention)
 
 
-@property (nonatomic, strong, getter=cyl_context, setter=cyl_setContext:) NSString *cyl_context;
 @property (nonatomic, strong, getter=cyl_selectedControl, setter=cyl_setSelectedControl:) UIControl *cyl_selectedControl;
 
 - (UIControl *)cyl_selectedControl;
@@ -82,7 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)cyl_hasPlusChildViewController;
 - (CGFloat)cyl_cachedXOffsetWithIndex:(CGFloat)index;
 - (CGFloat)cyl_cachedWidthOffsetWithIndex:(CGFloat)index;
-
+- (BOOL)cyl_shouldUpdateHiddenStatueForPlusButtonLabel;
 
 @end
 

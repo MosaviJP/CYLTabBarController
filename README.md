@@ -1,7 +1,7 @@
 <p align="center"><a href="https://github.com/ChenYilong/CYLTabBarController"><img src="https://repository-images.githubusercontent.com/44896762/c1d6e880-a8d8-11e9-8bb4-2da8ebc06f0a"></a></p>
 
 
-# [CN]CYLTabBarController【一行代码实现 Lottie 动画 TabBar】iOS26+ Tested
+# [CN]CYLTabBarController【一行代码实现 Lottie 动画 TabBar】iOS27+ Tested
 # [EN]CYLTabBarController [An animated tabBar supported by Lottie with one line of code] 
 
 
@@ -52,10 +52,22 @@
  
 ## Preview of latest version 
 
- Preview of the latest version 1.99.38 on iOS 26+ 
+ Preview of the latest version  on iOS 27+ 
  
-CYLTabBarController 现已支持 iOS26 上实现以下效果， 请更新至版本1.99.38以上版本：
 
+
+
+CYLTabBarController 现已适配iOS27， 新增如下功能：
+<img width="1206" height="768" alt="Image" src="https://github.com/user-attachments/assets/9b6acbb4-d9dd-461e-bc3b-ea8916e97d6d" />
+
+- ✅支持iOS27下，0代码，实现扁平风格样式。 无需新增代码， 即可继续使用UI兼容模式，如果你在iOS27下 保留 UIDesignRequiresCompatibility 字段， CYLTabBarController 将会检测该字段， 如果为True，将切换至UI扁平设计样式。iOS27之前， UIDesignRequiresCompatibi字段， 维持系统逻辑。以此实现0代码，切换到扁平风格样式。
+- ✅UI扁平风格作为独立组件集成， 插件化集成， 若仅需液态玻璃效果， 则可实现更低耦合，更小包体积。
+- ✅1比1实现系统扁平风格样式，API接口完全与液态玻璃样式共享， 仅需修改样式属性，即可实现样式切换。
+- ✅支持液态玻璃样式与扁平设计样式，运行期间切换， 支持AB test， 仅需一行代码，修改 样式属性， 即可实现。支持， 默认扁平样式， 灰度下发，逐渐切换至液态玻璃。
+- ✅液态玻璃 继承自UITabBar ， 在支持所有系统样式设置。在此基础上， 实现加号按钮， 灵活性优于系统 TabBar。
+- ✅支持Lottie 动画， iOS26和iOS27液态玻璃， 红点角标动画， 同时展示。
+- ✅即刻升级至 1.99.41 尝试， iOS27正式版本发布前， 我将至少发布3个版本，用来支持iOS27正式版适配， 如遇到问题请前往 GitHub 提issue， 请勿社交媒体留言。issue为唯一问题反馈途径。 
+CYLTabBarController 现已支持 iOS26 上实现以下效果， 请更新至版本1.99.39以上版本：
 - ✅同时展示 Lottie动画与液态玻璃效果；
 - ✅支持将加号➕按钮，展示在液态玻璃效果上，并居中展示。保留 CYLTabBarController 旧版本的所有加号按钮逻辑。仅增加玻璃遮罩效果；
 - ✅未使用私有API实现液态玻璃，可通过代码静态扫描，Apple 审核过审安全；
@@ -64,10 +76,12 @@ CYLTabBarController 现已支持 iOS26 上实现以下效果， 请更新至版�
 - ✅对于已经集成 CYLTabBarController 的开发者友好，升级适配开发难度， 代码修改低于10行，升级总时长低于1小时；
 - ✅不依赖UI兼容模式， iOS27 过审友好；
 - ✅不依赖UI兼容模式， 实现扁平风格UI， iOS27 过审友好；
-
-即刻访问 [这里]( https://github.com/ChenYilong/CYLTabBarController
- "") ，了解更多：
+- ✅ GitHub.com/ChenYilong/CYLTabBarController
  
+
+
+<img width="1320" height="477" alt="Image" src="https://github.com/user-attachments/assets/a0e89aba-3f3b-4583-bb5e-0c291b76856a" />
+<img width="1320" height="519" alt="Image" src="https://github.com/user-attachments/assets/a867a1a3-fcf2-411c-8b01-f56711016034" />
 
 
 
@@ -78,7 +92,7 @@ CYLTabBarController 现已支持 iOS26 上实现以下效果， 请更新至版�
 ![Image](https://github.com/user-attachments/assets/c196f44e-ce4b-4de0-b6be-6cafe5b93292)
 ![Image](https://github.com/user-attachments/assets/5c2f0a09-6c2b-4506-a3b9-87ca3f1fe779)
 ![Image](https://github.com/user-attachments/assets/3a2f2c8a-db70-4513-8b7f-0fcff077baec)
-1.99.38 版本， 现已支持 iOS26上 ， APP 运行中， 增加或者删除加号按钮， 效果见下面的演示，即刻访问：https://github.com/ChenYilong/CYLTabBarController Demo 进行尝试：
+1.99.39 版本， 现已支持 iOS26上 ， APP 运行中， 增加或者删除加号按钮， 效果见下面的演示，即刻访问：https://github.com/ChenYilong/CYLTabBarController Demo 进行尝试：
 
 <img width="1320" height="2868" alt="Image" src="https://github.com/user-attachments/assets/4825a10c-df23-42ae-b8d6-322646b090e4" />
 <img width="883" height="1917" alt="Image" src="https://github.com/user-attachments/assets/8e6aeca5-8e36-46d0-9626-c6de94edbef3" />
@@ -335,6 +349,23 @@ pod 'CYLTabBarController', '~> 1.24.0'
 
  关于 CocoaPods 的更多内容，您可以参考 [CocoaPods 文档](https://cocoapods.org/)。
 
+### 使用 Carthage 导入 CYLTabBarController（可选）
+
+除了 CocoaPods 和 Swift Package Manager，也可以通过 [Carthage](https://github.com/Carthage/Carthage) 集成本库。在 `Cartfile` 中添加：
+
+```
+github "ChenYilong/CYLTabBarController"
+```
+
+然后执行：
+
+```
+carthage update --use-xcframeworks
+```
+
+构建完成后，将生成的 `CYLTabBarController.xcframework` 拖入工程，并在 "Frameworks, Libraries, and Embedded Content" 中设置为 `Embed & Sign`。
+
+> 说明：Carthage 构建的是不含 Lottie 动画相关文件（`LottieSwift` 目录）的核心功能集，与 CocoaPods 的 `Core`子规范（subspec）范围一致。
 
 ###  第二步：设置CYLTabBarController的两个数组：控制器数组和TabBar属性数组
 
@@ -1132,9 +1163,19 @@ button.frame = CGRectMake(0.0, 0.0, w, h);
 Q：如何兼容 Lottie 动画？
 A：用法见：https://github.com/ChenYilong/CYLTabBarController/issues/341
 
+
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ChenYilong/CYLTabBarController&type=Date)](https://star-history.com/#ChenYilong/CYLTabBarController&Date)
+
+<a href="https://star-history.dera.page/#ChenYilong/CYLTabBarController&type=date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=ChenYilong/CYLTabBarController&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=ChenYilong/CYLTabBarController&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://star-history.dera.page/svg?repos=ChenYilong/CYLTabBarController&type=date&legend=top-left" />
+ </picture>
+</a>
+
+
 
 
 （更多iOS开发干货，欢迎关注  [微博@iOS程序犭袁](http://weibo.com/luohanchenyilong/) ）

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -302,7 +302,6 @@
 				184C1CDB23F65A9A00B23C7F /* Macros */,
 				184C1CE123F65A9A00B23C7F /* Extenstion */,
 				184C1CDD23F65A9A00B23C7F /* Root */,
-				184C1CDC23F65A9A00B23C7F /* Model */,
 			);
 			path = Public;
 			sourceTree = "<group>";
@@ -313,13 +312,6 @@
 				184F198923F7E046002DBAE4 /* PrefixPch.swift */,
 			);
 			path = Macros;
-			sourceTree = "<group>";
-		};
-		184C1CDC23F65A9A00B23C7F /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		184C1CDD23F65A9A00B23C7F /* Root */ = {
@@ -384,7 +376,6 @@
 				184C1C8623F65A2800B23C7F /* Sources */,
 				184C1C8723F65A2800B23C7F /* Frameworks */,
 				184C1C8823F65A2800B23C7F /* Resources */,
-				DB7726293EEFA37CAD27D5C3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -422,7 +413,6 @@
 				184C1CA723F65A2A00B23C7F /* Sources */,
 				184C1CA823F65A2A00B23C7F /* Frameworks */,
 				184C1CA923F65A2A00B23C7F /* Resources */,
-				FCC4ED0E1C5D6560F0AF07ED /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -570,40 +560,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DB7726293EEFA37CAD27D5C3 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthyHome/Pods-HealthyHome-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthyHome/Pods-HealthyHome-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HealthyHome/Pods-HealthyHome-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FCC4ED0E1C5D6560F0AF07ED /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthyHome-HealthyHomeUITests/Pods-HealthyHome-HealthyHomeUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HealthyHome-HealthyHomeUITests/Pods-HealthyHome-HealthyHomeUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HealthyHome-HealthyHomeUITests/Pods-HealthyHome-HealthyHomeUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

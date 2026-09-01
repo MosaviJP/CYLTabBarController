@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "CYLBadgeProtocol.h"
+@class CYLTabBarBadgeView;
 
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark -- badge apis
 
 @interface UIView (CYLBadgeExtention)<CYLBadgeProtocol>
+@property (nonatomic, strong, getter=cyl_badge, setter=cyl_setBadge:) CYLTabBarBadgeView *cyl_badge;
 
 - (BOOL)cyl_isShowBadge;
 
@@ -58,6 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
  * 在 cyl_getActualBadgeSuperView方法中使用
  */
 - (UIView *)cyl_findBarButtonContentView;
+
+@property (nonatomic, assign, getter=cyl_keepShowingPlusButtonLabel, setter=cyl_setKeepShowingPlusButtonLabel:) BOOL cyl_keepShowingPlusButtonLabel;
 
 @end
 

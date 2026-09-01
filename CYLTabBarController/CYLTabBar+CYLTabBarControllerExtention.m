@@ -25,17 +25,6 @@
 
 @implementation CYLTabBar (CYLTabBarControllerExtention)
 
-- (NSString *)cyl_context {
-    NSString *context = objc_getAssociatedObject(self, @selector(cyl_context));
-    return context;
-}
-
-- (void)cyl_setContext:(NSString *)context {
-    NSString *context_ = context;
-    objc_setAssociatedObject(self, @selector(cyl_context), context_, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-
 - (BOOL)cyl_hasPlusChildViewController {
     NSString *context = CYLPlusChildViewController.cyl_context;
     BOOL isSameContext = [context isEqualToString:self.cyl_context] && (context && (context.length > 0) && self.cyl_context && self.cyl_context.length > 0);
@@ -89,7 +78,7 @@
 - (NSArray *)cyl_visibleControls {
     NSMutableArray *originalTabBarButtons = [NSMutableArray arrayWithArray:[self.cyl_originalTabBarButtons copy]];
     BOOL notAdded = (NSNotFound == [originalTabBarButtons indexOfObject:CYLExternPlusButton]);
-    if (CYLExternPlusButton && notAdded && [self isKindOfClass:[CYLTabBar class]]) {
+    if (CYLExternPlusButton && notAdded && [self isKindOfClass:[CYLTabBar class]] && self.hasPlusButton) {
         [originalTabBarButtons addObject:CYLExternPlusButton];
     }
     if (originalTabBarButtons.count == 0) {
@@ -147,7 +136,7 @@
 - (UIControl *)cyl_tabBarButtonWithTabIndex:(NSUInteger)tabIndex {
     UIControl *selectedControl = [self cyl_visibleControlWithIndex:tabIndex];
     
-    NSInteger plusViewControllerIndex = [self.cyl_tabBarController.viewControllers indexOfObject:CYLPlusChildViewController];
+    NSInteger plusViewControllerIndex = [self.tabBarController.viewControllers indexOfObject:CYLPlusChildViewController];
     BOOL isPlusViewControllerAdded = CYLPlusChildViewController.cyl_plusViewControllerEverAdded && (plusViewControllerIndex != NSNotFound);
     
     if (isPlusViewControllerAdded) {
@@ -186,22 +175,20 @@
     if (!lottieURL) {
         return;
     }
-    //_UITabButton
-    [self cyl_stopAnimationOfAllLottieView];
+    // 统一使用CYLTabBarItemLottieAnimationPlayingNotification进行动画重置， 故删除手动重置。
+    // [self cyl_stopAnimationOfAllLottieView];
     [selectedControl cyl_animationLottieImageWithLottieURL:lottieURL size:size defaultSelected:defaultSelected contentMode:contentMode];
-
+    
 #endif
     
 #if __has_include(<Lottie/Lottie-Swift.h>)
     if (!lottieURL) {
         return;
     }
-    //_UITabButton
-    [self cyl_stopAnimationOfAllLottieView];
+    // 统一使用CYLTabBarItemLottieAnimationPlayingNotification进行动画重置， 故删除手动重置。
+    // [self cyl_stopAnimationOfAllLottieView];
     [selectedControl cyl_animationLottieImageWithLottieURL:lottieURL size:size defaultSelected:defaultSelected contentMode:contentMode];
 #endif
-    
-
 }
 
 - (void)cyl_stopAnimationOfAllLottieView {
@@ -213,13 +200,16 @@
         [self.cyl_platterSelectedContentViews enumerateObjectsUsingBlock:^(UIControl * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj cyl_stopAnimationOfLottieView];
         }];
-    } else
-    if ([self isKindOfClass:[CYLFlatDesignTabBar class]]) {
+    }
+#if __has_include(<CYLTabBarController/CYLFlatDesignTabBar.h>)
+    else if ([self isKindOfClass:[CYLFlatDesignTabBar class]]) {
         CYLFlatDesignTabBar *flatDesignTabBar = (CYLFlatDesignTabBar *)self;
         [flatDesignTabBar.tabBarItems enumerateObjectsUsingBlock:^(UIControl * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj cyl_stopAnimationOfLottieView];
         }];
     }
+#endif
+
 
 #endif
     
@@ -231,14 +221,17 @@
         [self.cyl_platterSelectedContentViews enumerateObjectsUsingBlock:^(UIControl * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj cyl_stopAnimationOfLottieView];
         }];
-    } else
-    if ([self isKindOfClass:[CYLFlatDesignTabBar class]]) {
+    }
+#if __has_include(<CYLTabBarController/CYLFlatDesignTabBar.h>)
+
+    else if ([self isKindOfClass:[CYLFlatDesignTabBar class]]) {
         CYLFlatDesignTabBar *flatDesignTabBar = (CYLFlatDesignTabBar *)self;
         [flatDesignTabBar.tabBarItems enumerateObjectsUsingBlock:^(UIControl * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [obj cyl_stopAnimationOfLottieView];
         }];
     }
-
+#endif
+    
 #endif
 }
 
@@ -265,9 +258,9 @@
 }
 
 - (UIControl *)cyl_normalContentControlFromSelectedContentControl:(UIControl *)selectedContentControl {
-//    if ([selectedContentControl cyl_isPlusControl]) {
-//        return nil;
-//    }
+    //    if ([selectedContentControl cyl_isPlusControl]) {
+    //        return nil;
+    //    }
     UIControl *contentControl = nil;
     //FIXME:  to delete cyl_platterSelectedContentViewsWithoutPlusButton
     NSUInteger index = [self.cyl_platterSelectedContentViews indexOfObject:selectedContentControl];
@@ -278,7 +271,10 @@
         //FIXME:  to delete cyl_subTabBarButtonsWithoutPlusButton
         contentControl = [self.cyl_subTabBarButtons objectAtIndex:index];
     } @catch (NSException *exception) {
-        }
+#if defined(DEBUG) || defined(BETA)
+        NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
+#endif
+    }
     if (!contentControl) {
         return nil;
     }
@@ -328,7 +324,11 @@
                     break;
                 }
             } while (false); // same as : 0, NO
-        } @catch (NSException *exception) {}
+        } @catch (NSException *exception) {
+#if defined(DEBUG) || defined(BETA)
+            NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
+#endif
+        }
     }
     return selectedControl;
 }
@@ -343,9 +343,62 @@
     return selectedIndex;
 }
 
+- (BOOL)cyl_shouldUpdateHiddenStatueForPlusButtonLabel {
+    CYLTabBarController *tabBarController = [self tabBarController];
+    return [self cyl_shouldUpdateHiddenStatueForPlusButtonLabelForTabBarController:tabBarController];
+}
+
+- (BOOL)cyl_shouldUpdateHiddenStatueForPlusButtonLabelForTabBarController:(CYLTabBarController *)theTabBarController {
+    if (![CYLConstants isLiquidGlassActive] || ![self isKindOfClass:[CYLTabBar class]]) {
+        return NO;
+    }
+    
+    CYLTabBarController *tabBarController = theTabBarController;
+    
+    if (!theTabBarController) {
+        tabBarController = [self tabBarController];
+    }
+    
+    CYLTabBar *tabBar = (CYLTabBar *)tabBarController.tabBar;
+    if (!tabBar) {
+        tabBar = self;
+    }
+    if (![tabBar hasPlusChildViewController]) {
+        return NO;
+    }
+    if (![tabBar hasPlusButton]) {
+        return NO;
+        
+    }
+    if (!CYLExternPlusButton.cyl_tabLabel) {
+        return NO;
+    }
+    if (CYLExternPlusButton.cyl_tabLabel.text.length == 0) {
+        return NO;
+    }
+    
+    SEL actionshouldShowPlatterLiquidLensViewForControl = @selector(tabBarController:shouldShowPlatterLiquidLensViewForControl:);
+    BOOL shouldShowPlatterLiquidLensViewForControl;
+    CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS(
+                                            
+                                            
+                                            shouldShowPlatterLiquidLensViewForControl = [tabBarController performSelector:actionshouldShowPlatterLiquidLensViewForControl withObject:tabBarController withObject:CYLExternPlusButton];
+                                            
+                                            
+                                            );
+    
+    //如果在选中CYLPlusChildViewController的状态下，  重复点击，或者滑动手势，又选中CYLPlusChildViewController。 相当于重复点击CYLPlusChildViewController， 则不显示未选中状态的Label， 仅仅在切换到其他tab的情况下， 显示未选中状态的Label。 否则会出现Label重叠的情况。
+    if (shouldShowPlatterLiquidLensViewForControl && ![tabBar isPlusButtonLayoutCentered]  ) {
+        return YES;
+    }
+    return NO;
+}
+
 @end
 
 @implementation UITabBar (CYLTabBarControllerExtention)
+
+
 
 - (CGFloat)cyl_platterViewWidth {
     NSNumber *platterViewWidthObject = objc_getAssociatedObject(self, @selector(cyl_platterViewWidth));
@@ -516,7 +569,9 @@
 - (CGSize)cyl_boundsSize {
     CGSize size = self.bounds.size;
     if (![CYLConstants isLiquidGlassActive]) {
-        return size;
+        CGFloat contentHeight = CGRectGetHeight(self.bounds) - self.safeAreaInsets.bottom;
+         CGSize sizeWithSafeAreaInsets = CGSizeMake(size.width, contentHeight);
+        return sizeWithSafeAreaInsets;
     }
     if (CYL_NoNeed_UIDesignRequiresCompatibility_with_iOS26) {
         [self cyl_tabBarSubviews];
@@ -547,7 +602,9 @@
     @try {
         view = self.cyl_platterViews[index];
     } @catch (NSException *exception) {
-        
+#if defined(DEBUG) || defined(BETA)
+        NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
+#endif
     }
     return view;
 }
@@ -560,6 +617,9 @@
     @try {
         view = self.cyl_platterContentViews[index];
     } @catch (NSException *exception) {
+#if defined(DEBUG) || defined(BETA)
+        NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
+#endif
     }
     return  view;
 }
@@ -711,7 +771,9 @@
     @try {
         view = self.cyl_platterSelectedContentViewsWithoutPlusButton[index];
     } @catch (NSException *exception) {
-        
+#if defined(DEBUG) || defined(BETA)
+        NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
+#endif
     }
     return view;
 }
@@ -722,7 +784,9 @@
     @try {
         view = self.cyl_platterSelectedContentViews[index];
     } @catch (NSException *exception) {
-        
+#if defined(DEBUG) || defined(BETA)
+        NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
+#endif
     }
     return view;
 }
@@ -737,10 +801,14 @@
     @try {
         view = self.cyl_platterPortalViews[index];
     } @catch (NSException *exception) {
-        
+#if defined(DEBUG) || defined(BETA)
+        NSLog(@"🔴类名与方法名：%@（在第%@行）, 描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
+#endif
     }
     return view;
 }
+
+
 
 @end
 

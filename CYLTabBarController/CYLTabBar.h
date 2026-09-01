@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "CYLPlusButton.h"
+#import "NSObject+CYLTabBarControllerExtention.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @class CYLTabBar;
+// CYLConstants.h 里的前向声明被包在 `__has_include(<CYLTabBarController/CYLFlatDesignTabBar.h>)`
+// 里，未引入 CYLFlatDesignTabBar 子库的用法（如 LottieSwift subspec）拿不到该类型，
+// 因此这里显式再声明一次，保证本头文件可独立编译。
+@class CYLTabBarController;
 typedef void(^CYLTabBarDidLayoutSubViewsBlock)(CYLTabBar *tabBar);
 
 @interface CYLTabBar : UITabBar
@@ -22,16 +27,25 @@ typedef void(^CYLTabBarDidLayoutSubViewsBlock)(CYLTabBar *tabBar);
  */
 @property (nonatomic, assign, readonly) CGFloat tabImageViewDefaultOffset;
 
-/** 可以不设置， 默认为 CYLTabBarController，如果设置了，请实现 CYLPlusButton 里 的 +[CYLPlusButton tabBarContext] 并保持一致。如果两个都不是实现，默认为一致均为 CYLTabBarController */
-@property (nonatomic, copy) NSString *context;
+/*!
+ [EN] This can be left unset; the default is CYLTabBarController. If set, please implement the `+[CYLPlusButton tabBarContext]` method in CYLPlusButton and ensure consistency. If neither is implemented, the default is CYLTabBarController for both.
+
+ [CN] 可以不设置， 默认为 CYLTabBarController，如果设置了，请实现 CYLPlusButton 里 的 `+[CYLPlusButton tabBarContext]` 并保持一致。如果两个都不是实现，默认为一致均为 CYLTabBarController
+ */
+@property (nonatomic, copy, nullable) NSString *context;
 
 @property (nonatomic, copy, nullable) CYLTabBarDidLayoutSubViewsBlock didLayoutSubViewsBlock;
 
 /** 发布按钮 */
-@property (nonatomic, strong) UIButton<CYLPlusButtonSubclassing> *plusButton;
+@property (nonatomic, strong) CYLPlusButton<CYLPlusButtonSubclassing> *plusButton;
 @property (nonatomic, assign) CGFloat tabBarItemWidth;
 @property (nonatomic, copy) NSArray<UIControl *> *tabBarButtonArray;
-@property (nonatomic, assign, getter=hasAddPlusButton) BOOL addPlusButton;
+
+/*!
+ * plusButton state:
+ * Register + Context match == Active
+ */
+@property (nonatomic, assign, getter=isPlusButtonActive) BOOL plusButtonActive;
 @property (nonatomic, assign) BOOL isLensViewLifed;
 @property (nonatomic, strong) UIGestureRecognizer *liquidGlassContinuousGestureRecognizer;
 
@@ -43,7 +57,10 @@ typedef void(^CYLTabBarDidLayoutSubViewsBlock)(CYLTabBar *tabBar);
 
 - (NSUInteger)plusButtonIndex;
 
+- (BOOL)hasPlusButton;
+- (BOOL)hasPlusChildViewController;
 - (BOOL)isPlusButtonLayoutCentered;
+- (CYLTabBarController *)tabBarController;
 
 @end
 
