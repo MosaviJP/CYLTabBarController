@@ -1,22 +1,24 @@
-// swift-tools-version:5.1
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 5.9
 
 import PackageDescription
 
 let package = Package(
     name: "CYLTabBarController",
     platforms: [
-        .iOS(.v8),
+        .iOS(.v12)
     ],
     products: [
-        .library(name: "CYLTabBarController",  targets: ["CYLTabBarController"])
+        .library(
+            name: "CYLTabBarController",
+            targets: ["CYLTabBarController"]
+        )
     ],
-    dependencies: [],
     targets: [
         .target(
             name: "CYLTabBarController",
             path: "CYLTabBarController",
             exclude: ["LottieSwift"],
+            publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("."),
                 .headerSearchPath("CYLBadge"),
