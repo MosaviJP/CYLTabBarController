@@ -804,7 +804,6 @@ if (CYLTabBarStyleTypeFlatDesign == self.tabBarStyleType) {
                     imageoffset = imagePositionAdjustment;
                 }
                 
-                lottieURL = [CYLConstants cyl_getURLFromString:lottieFilePath];
                 if (lottieURL) {
                     [self.lottieURLs addObject:lottieURL];
                     NSValue *tureLottieSizeValue = [CYLConstants cyl_getTureLottieSizeValue:lottieSizeValue fromNormalImage:normalImage];
@@ -819,6 +818,7 @@ if (CYLTabBarStyleTypeFlatDesign == self.tabBarStyleType) {
                                                                                              imageInsets:insets
                                                                                           lottieFilePath:lottieFilePath
                                                                                          lottieSizeValue:lottieSizeValue];
+                cyl_tabBarItem.lottieURL = lottieURL;
                 
                 
                 [cyl_tabBarItem cylflatdesign_setTabBarController:self];
@@ -2307,6 +2307,17 @@ if (_cyl_tabBar && [_cyl_tabBar isKindOfClass:[CYLFlatDesignTabBar class]]) {
 
     if (selectedViewController.cyl_isPlaceholder) { return; }
 
+#if __has_include(<CYLTabBarController/CYLFlatDesignTabBar.h>)
+    NSArray *viewControllers = self.viewControllers;
+    NSUInteger selectedIndex = NSNotFound;
+    if (viewControllers) {
+        selectedIndex = [viewControllers indexOfObject:selectedViewController];
+    }
+    if (NSNotFound != selectedIndex) {
+        _selectedIndex = selectedIndex;
+    }
+#endif
+
 //           NSUInteger indexOfSelectedViewController = [self.childViewControllers indexOfObject:selectedViewController];
 //            if (NSNotFound == indexOfSelectedViewController) { return; }
     
@@ -2357,8 +2368,7 @@ if (_cyl_tabBar && [_cyl_tabBar isKindOfClass:[CYLFlatDesignTabBar class]]) {
         if (CYLTabBarStyleTypeFlatDesign == self.tabBarStyleType) {
 #if __has_include(<CYLTabBarController/CYLFlatDesignTabBar.h>)
         if (![_cyl_tabBar isKindOfClass:[CYLFlatDesignTabBar class]]) { return; }
-            
-            NSInteger selectedIndex = [self.viewControllers indexOfObject:selectedViewController];
+            if (NSNotFound == selectedIndex) { return; }
             //  iOS26 液态玻璃样式 不再使用点击事件， 而是在 `-setSelectedViewController` and `-setSelectedIndex`中处理
             
             // 用户点击 tab 时会触发 //showing initial vc for every tab :)
