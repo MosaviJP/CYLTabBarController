@@ -1,2 +1,3 @@
-// 保持 Swift Package 下的框架式头文件路径，使现有 __has_include 判断生效。
-#import "../CYLFlatDesignTabBar.h"
+// SPM-only shim: CocoaPods exposes this header as <CYLTabBarController/CYLFlatDesignTabBar.h>.
+// It keeps the `__has_include(<CYLTabBarController/...>)` checks true under SPM.
+#import "../../CYLFlatDesignTabBar/CYLFlatDesignTabBar-ObjectiveC/CYLFlatDesignTabBar/CYLFlatDesignTabBar.h"
