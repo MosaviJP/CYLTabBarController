@@ -72,6 +72,7 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
     CYLBadgeAnimationType animationType = [animationTypeValue intValue];
     [self  cyl_setBadgeAnimationTypeValue:@(animationType)];
     [self cyl_showBadgeWithValue:value];
+    [self cyl_updateBadgeContainer];
     
     if (animationType != CYLBadgeAnimationTypeNone) {
         [self cyl_beginAnimation];
@@ -328,6 +329,36 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
                                                   usingBlock:CYLTabBarItemLottieAnimationPlayingNotificationBlock];
 //    [self cyl_setBadge:view];
 
+}
+
+- (void)cyl_updateBadgeContainer {
+    UIView *badge = self.cyl_badge;
+    if (![CYLConstants isLiquidGlassActive] || !badge || badge.hidden || badge.superview != self) {
+        return;
+    }
+
+    UIView *container = self.superview;
+    while (container && ![container isKindOfClass:[UIControl class]]) {
+        container = container.superview;
+    }
+    if (![(UIControl *)container cyl_isPlatterNormalControl]) {
+        return;
+    }
+
+    // 未选中图标的合成层可能改变角标颜色，角标由原视图持有，直接挂载到 Tab 按钮。
+    // 保留 CYL 算出的尺寸和偏移，用相对图标的约束跟随布局，避免切换 Tab 后位置漂移。
+    CGSize size = badge.bounds.size;
+    CGFloat rightOffset = badge.center.x - CGRectGetMaxX(self.bounds);
+    CGFloat topOffset = badge.center.y - CGRectGetMinY(self.bounds);
+    badge.userInteractionEnabled = NO;
+    [container addSubview:badge];
+    badge.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [badge.widthAnchor constraintEqualToConstant:size.width],
+        [badge.heightAnchor constraintEqualToConstant:size.height],
+        [badge.centerXAnchor constraintEqualToAnchor:self.trailingAnchor constant:rightOffset],
+        [badge.centerYAnchor constraintEqualToAnchor:self.topAnchor constant:topOffset]
+    ]];
 }
 
 - (void)cyl_resetRedDotBadgeFrame {
