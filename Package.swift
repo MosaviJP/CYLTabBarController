@@ -16,8 +16,8 @@ let package = Package(
     ],
     dependencies: [
         // Same requirement as the podspec's `LottieSwift` subspec: 'lottie-ios', '>= 4.0.0'.
-        // lottie-spm is Airbnb's official SPM distribution of lottie-ios.
-        .package(url: "https://github.com/airbnb/lottie-spm.git", from: "4.0.0"),
+        // 与 App 共用 lottie-ios 源码包，避免同时链接两份 Lottie 模块。
+        .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.0.0"),
     ],
     targets: [
         // Swift bridge that exposes Lottie 4.x to the Objective-C sources (`CYLCompatibleLOTAnimationView`).
@@ -25,7 +25,7 @@ let package = Package(
         .target(
             name: "CYLTabBarControllerLottieSwift",
             dependencies: [
-                .product(name: "Lottie", package: "lottie-spm"),
+                .product(name: "Lottie", package: "lottie-ios"),
             ],
             path: "CYLTabBarController/LottieSwift"
         ),
@@ -33,7 +33,7 @@ let package = Package(
             name: "CYLTabBarController",
             dependencies: [
                 "CYLTabBarControllerLottieSwift",
-                .product(name: "Lottie", package: "lottie-spm"),
+                .product(name: "Lottie", package: "lottie-ios"),
             ],
             path: "CYLTabBarController",
             exclude: ["LottieSwift"],
