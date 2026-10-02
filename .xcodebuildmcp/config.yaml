@@ -1,0 +1,23 @@
+schemaVersion: 3
+enabledWorkflows:
+  - simulator
+  - debugging        # ← 启用LLDB工具
+  - ui-automation    # ← 启用UI自动化（后面用）  
+debug: false
+sentryDisabled: false
+setupPreferences:
+  platforms:
+    - iOS
+sessionDefaults:
+  workspacePath: CYLTabBarController.xcworkspace
+  scheme: CYLTabBarController (CYLTabBarController project)
+  simulatorId: 428BC70C-4151-4268-8A60-ACAEFD2D5529
+  simulatorName: iPhone 17 Pro Max
+  simulatorPlatform: iOS Simulator
+  # ✅ v2.7.0: 显式设置configuration
+  configuration: Debug
+  
+  # ✅ 可选：session defaults（避免每次都传参）
+  extraArgs:
+    - -derivedDataPath
+    - ./DerivedData
