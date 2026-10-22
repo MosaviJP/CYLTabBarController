@@ -96,6 +96,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (UIView *)cyl_findBarButtonContentView;
 
+// Internal: update root-level iOS 27 TabBar badge overlays after layout.
+- (void)cyl_updateBadgeOverlayLayout;
+
 @property (nonatomic, assign, getter=cyl_keepShowingPlusButtonLabel, setter=cyl_setKeepShowingPlusButtonLabel:) BOOL cyl_keepShowingPlusButtonLabel;
 
 @end

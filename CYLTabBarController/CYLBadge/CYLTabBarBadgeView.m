@@ -26,57 +26,28 @@
 
 - (UILabel *)badgeLabel {
     if (!_badgeLabel) {
-        _badgeLabel = [[UILabel alloc] initWithFrame:self.frame];
+        _badgeLabel = [[UILabel alloc] initWithFrame:self.bounds];
         _badgeLabel.textAlignment = NSTextAlignmentCenter;
         _badgeLabel.backgroundColor = [UIColor clearColor];
-        _badgeLabel.text = @"test";
-        _badgeLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        _badgeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
 //        _badgeLabel.font = kCYLBadgeDefaultFont;//[UIFont systemFontOfSize:11];
         _badgeLabel.textColor = [UIColor whiteColor];
         
         [self addSubview:_badgeLabel];
         [self bringSubviewToFront:_badgeLabel];
-        _badgeLabel.layer.zPosition = MAXFLOAT;
     }
     return _badgeLabel;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    if (CGRectEqualToRect(CGRectZero, self.bounds)) {
-        return;
-    }
-    if (CGRectEqualToRect(self.badgeLabel.frame, self.bounds)) {
-        return;
-    }
-     
-//    self.frame = self.bounds;
-//    [self setNeedsDisplay];
-
     self.badgeLabel.frame = self.bounds;
-
-//    self.badgeLabel.center = self.center;
-
 }
+
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
-    if (CGRectEqualToRect(CGRectZero, frame)) {
-        return;
-    }
-    if (CGRectEqualToRect(CGRectZero, CGRectMake(0, 0, frame.size.width, frame.size.height))) {
-        return;
-    }
-    self.badgeLabel.frame = frame;
-
-}
-
--(void)setCenter:(CGPoint)center {
-        [super setCenter:center];
-    if (CGPointEqualToPoint(CGPointZero, center)) {
-        return;
-    }
-    self.badgeLabel.center = center;
+    _badgeLabel.frame = self.bounds;
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {

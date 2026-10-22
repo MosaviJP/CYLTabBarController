@@ -14,6 +14,7 @@
 #import "UIView+CYLTabBarControllerExtention.h"
 #import "UIImage+CYLTabBarControllerExtention.h"
 #import "CYLBadge/CYLTabBarBadgeView.h"
+#import "UIControl+CYLTabBarControllerExtention.h"
 #if __has_include(<CYLTabBarController/CYLTabBarController.h>)
 #import <CYLTabBarController/CYLTabBarController.h>
 #else
@@ -30,6 +31,63 @@
 #define kCYLBadgeDefaultDelayIfNeededForSeconds (0.5)
 
 static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
+
+// Keep iOS 27 badges outside UIKit's glass/image compositing hierarchy.
+// The badge itself remains owned by its original image view, so existing
+// show/clear/resume APIs continue to operate on the same instance.
+@interface CYLTabBarBadgeOverlayView : UIView
+@property (nonatomic, weak) UIView *anchorView;
+@property (nonatomic, weak) UIView *badgeView;
+@property (nonatomic, weak) UIControl *tabButton;
+@property (nonatomic, weak) CYLTabBarController *controller;
+- (void)updateBadgeLayout;
+@end
+
+@implementation CYLTabBarBadgeOverlayView
+
+- (void)updateBadgeLayout {
+    UIView *anchor = self.anchorView;
+    UIView *badge = self.badgeView;
+    CYLTabBarController *controller = self.controller;
+    if (!anchor || !badge || badge.superview != self || !controller) {
+        [self removeFromSuperview];
+        return;
+    }
+    UIView *host = self.superview;
+    UITabBar *tabBar = controller.tabBar;
+    BOOL visible = host.window && anchor.window == host.window &&
+        [anchor isDescendantOfView:tabBar] &&
+        CGRectIntersectsRect(host.bounds, [tabBar convertRect:tabBar.bounds toView:host]);
+    // Preserve the badge's own hidden/alpha state for clear/resume APIs.
+    for (UIView *view = tabBar; visible && view && view != host; view = view.superview) {
+        visible = !view.hidden && view.alpha > 0.01;
+    }
+    BOOL selectedCopy = [self.tabButton cyl_isPlatterSelectedControl];
+    UIControl *normalButton = self.tabButton.cyl_platterNormalControl;
+    // UIKit's selected-state copies may not have CYL's cached index set.
+    // Match the actual item instead of treating an unset index as tab zero.
+    UIControl *selectedButton = controller.selectedViewController.tabBarItem.cyl_tabButton;
+    BOOL selectedTab = normalButton && normalButton == selectedButton;
+    // Both copies use the normal-state image geometry. The selected copy is
+    // transformed by UIKit's press/lift animation and is not a stable anchor.
+    UIView *layoutAnchor = normalButton.cyl_tabImageView ?: anchor;
+    CGPoint offset = anchor.cyl_badgeCenterOffset;
+    // Use center/bounds in the image's parent coordinates to exclude the
+    // image's own scale transform from the badge position.
+    CGPoint point = CGPointMake(layoutAnchor.center.x + CGRectGetWidth(layoutAnchor.bounds) / 2 + 2 + offset.x,
+                                layoutAnchor.center.y - CGRectGetHeight(layoutAnchor.bounds) / 2 + offset.y);
+    CGPoint center = [layoutAnchor.superview convertPoint:point toView:host];
+    [UIView performWithoutAnimation:^{
+        self.hidden = !visible || selectedCopy != selectedTab;
+        if (visible) {
+            self.bounds = (CGRect){CGPointZero, badge.bounds.size};
+            self.center = center;
+            badge.frame = self.bounds;
+        }
+    }];
+}
+
+@end
 
 @implementation UIView (CYLBadgeExtention)
 
@@ -62,7 +120,6 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
         animationTypeValue:(NSNumber *)animationTypeValue {
     CYL_SUPPRESS_ARC_PERFORM_SELECTOR_LEAKS
     (
-     [[[self cyl_badge] subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
      if ([self cyl_shouldUpdateBadgeSubviews]) {
          [[self cyl_badge] removeFromSuperview];
          id view = nil;
@@ -341,6 +398,30 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
     while (container && ![container isKindOfClass:[UIControl class]]) {
         container = container.superview;
     }
+    if (CYL_IS_IOS_27 && [container isKindOfClass:[UIControl class]] &&
+        ([(UIControl *)container cyl_isPlatterNormalControl] ||
+         [(UIControl *)container cyl_isPlatterSelectedControl])) {
+        CYLTabBarController *controller = container.cyl_tabBarController;
+        UIView *host = controller.view;
+        if (!host || ![self isDescendantOfView:controller.tabBar]) {
+            return;
+        }
+        CYLTabBarBadgeOverlayView *overlay = [[CYLTabBarBadgeOverlayView alloc] init];
+        overlay.anchorView = self;
+        overlay.badgeView = badge;
+        overlay.tabButton = (UIControl *)container;
+        overlay.controller = controller;
+        overlay.userInteractionEnabled = NO;
+        overlay.layer.zPosition = 100;
+        overlay.accessibilityIdentifier = @"cyl-tab-badge-overlay";
+        badge.userInteractionEnabled = NO;
+        badge.layer.zPosition = 0;
+        badge.translatesAutoresizingMaskIntoConstraints = YES;
+        [overlay addSubview:badge];
+        [host addSubview:overlay];
+        [host cyl_updateBadgeOverlayLayout];
+        return;
+    }
     if (![(UIControl *)container cyl_isPlatterNormalControl]) {
         return;
     }
@@ -359,6 +440,17 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
         [badge.centerXAnchor constraintEqualToAnchor:self.trailingAnchor constant:rightOffset],
         [badge.centerYAnchor constraintEqualToAnchor:self.topAnchor constant:topOffset]
     ]];
+}
+
+- (void)cyl_updateBadgeOverlayLayout {
+    if (!CYL_IS_IOS_27) {
+        return;
+    }
+    for (UIView *view in [self.subviews copy]) {
+        if ([view isKindOfClass:[CYLTabBarBadgeOverlayView class]]) {
+            [(CYLTabBarBadgeOverlayView *)view updateBadgeLayout];
+        }
+    }
 }
 
 - (void)cyl_resetRedDotBadgeFrame {

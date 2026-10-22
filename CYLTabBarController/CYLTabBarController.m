@@ -13,6 +13,7 @@
 #import "UIControl+CYLTabBarControllerExtention.h"
 #import "UIImage+CYLTabBarControllerExtention.h"
 #import "NSObject+CYLTabBarControllerExtention.h"
+#import "UIView+CYLBadgeExtention.h"
 
 #if __has_include(<Lottie/Lottie.h>)
 #import <Lottie/Lottie.h>
@@ -273,6 +274,7 @@ CGFloat const CYLFlatDesignUITabBarControllerHideShowBarDuration = 0.2;
     [super viewDidLayoutSubviews];
     CYL_IF_NOT_FLATDESIGN_BEGIN     //Not CYLTabBarStyleTypeFlatDesign
     [self.cyl_tabBar layoutSubviews];//Fix issue #93 #392
+    [self.view cyl_updateBadgeOverlayLayout];
     if ([self.cyl_tabBar isKindOfClass:[CYLTabBar class]] ) {
         // add callback for visiable control, included all plusButton.
         CYLTabBar *tabBar = (CYLTabBar *)self.cyl_tabBar;
@@ -2303,6 +2305,7 @@ if (_cyl_tabBar && [_cyl_tabBar isKindOfClass:[CYLFlatDesignTabBar class]]) {
    NSUInteger indexOfSelectedViewController = [self.childViewControllers indexOfObject:selectedViewController];
     if (NSNotFound == indexOfSelectedViewController) { return; }
     [super setSelectedViewController:selectedViewController];
+    [self.view setNeedsLayout];
     _selectedViewController = selectedViewController;
 
     if (selectedViewController.cyl_isPlaceholder) { return; }
