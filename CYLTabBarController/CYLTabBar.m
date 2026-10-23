@@ -75,6 +75,27 @@ static void *const CYLTabBarAlpha = (void*)&CYLTabBarAlpha;
     return self;
 }
 
+- (void)setFrame:(CGRect)frame {
+    [super setFrame:frame];
+    if (CYL_IS_IOS_27) {
+        [self.cyl_tabBarController.viewIfLoaded cyl_updateBadgeOverlayLayoutAnimated:YES];
+    }
+}
+
+- (void)setHidden:(BOOL)hidden {
+    [super setHidden:hidden];
+    if (CYL_IS_IOS_27) {
+        [self.cyl_tabBarController.viewIfLoaded cyl_updateBadgeOverlayLayoutAnimated:YES];
+    }
+}
+
+- (void)setAlpha:(CGFloat)alpha {
+    [super setAlpha:alpha];
+    if (CYL_IS_IOS_27) {
+        [self.cyl_tabBarController.viewIfLoaded cyl_updateBadgeOverlayLayoutAnimated:YES];
+    }
+}
+
 - (CGSize)sizeThatFits:(CGSize)size {
     CGSize sizeThatFits = [super sizeThatFits:size];
     if ([CYLConstants isLiquidGlassActive]) {

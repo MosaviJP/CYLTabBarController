@@ -40,12 +40,12 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
 @property (nonatomic, weak) UIView *badgeView;
 @property (nonatomic, weak) UIControl *tabButton;
 @property (nonatomic, weak) CYLTabBarController *controller;
-- (void)updateBadgeLayout;
+- (void)updateBadgeLayoutAnimated:(BOOL)animated;
 @end
 
 @implementation CYLTabBarBadgeOverlayView
 
-- (void)updateBadgeLayout {
+- (void)updateBadgeLayoutAnimated:(BOOL)animated {
     UIView *anchor = self.anchorView;
     UIView *badge = self.badgeView;
     CYLTabBarController *controller = self.controller;
@@ -55,12 +55,14 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
     }
     UIView *host = self.superview;
     UITabBar *tabBar = controller.tabBar;
+    // 不按目标 frame 提前隐藏，让角标随 TabBar 的动画一起移出屏幕。
     BOOL visible = host.window && anchor.window == host.window &&
-        [anchor isDescendantOfView:tabBar] &&
-        CGRectIntersectsRect(host.bounds, [tabBar convertRect:tabBar.bounds toView:host]);
+        [anchor isDescendantOfView:tabBar];
+    CGFloat alpha = 1;
     // Preserve the badge's own hidden/alpha state for clear/resume APIs.
     for (UIView *view = tabBar; visible && view && view != host; view = view.superview) {
-        visible = !view.hidden && view.alpha > 0.01;
+        visible = !view.hidden;
+        alpha *= view.alpha;
     }
     BOOL selectedCopy = [self.tabButton cyl_isPlatterSelectedControl];
     UIControl *normalButton = self.tabButton.cyl_platterNormalControl;
@@ -68,23 +70,32 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
     // Match the actual item instead of treating an unset index as tab zero.
     UIControl *selectedButton = controller.selectedViewController.tabBarItem.cyl_tabButton;
     BOOL selectedTab = normalButton && normalButton == selectedButton;
-    // Both copies use the normal-state image geometry. The selected copy is
-    // transformed by UIKit's press/lift animation and is not a stable anchor.
-    UIView *layoutAnchor = normalButton.cyl_tabImageView ?: anchor;
+    // 使用普通态实际显示的图标或 Lottie，保留动画视图的尺寸与偏移。
+    // 普通态图片暂时隐藏时仍保留其几何位置，避免使用选中态的按压变换。
+    UIView *layoutAnchor = normalButton.cyl_getActualBadgeSuperView;
+    if (!layoutAnchor) {
+        layoutAnchor = normalButton.cyl_tabImageView ?: anchor;
+    }
     CGPoint offset = anchor.cyl_badgeCenterOffset;
     // Use center/bounds in the image's parent coordinates to exclude the
     // image's own scale transform from the badge position.
     CGPoint point = CGPointMake(layoutAnchor.center.x + CGRectGetWidth(layoutAnchor.bounds) / 2 + 2 + offset.x,
                                 layoutAnchor.center.y - CGRectGetHeight(layoutAnchor.bounds) / 2 + offset.y);
     CGPoint center = [layoutAnchor.superview convertPoint:point toView:host];
-    [UIView performWithoutAnimation:^{
+    void (^layout)(void) = ^{
         self.hidden = !visible || selectedCopy != selectedTab;
+        self.alpha = alpha;
         if (visible) {
             self.bounds = (CGRect){CGPointZero, badge.bounds.size};
             self.center = center;
             badge.frame = self.bounds;
         }
-    }];
+    };
+    if (animated) {
+        layout();
+    } else {
+        [UIView performWithoutAnimation:layout];
+    }
 }
 
 @end
@@ -419,7 +430,7 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
         badge.translatesAutoresizingMaskIntoConstraints = YES;
         [overlay addSubview:badge];
         [host addSubview:overlay];
-        [host cyl_updateBadgeOverlayLayout];
+        [host cyl_updateBadgeOverlayLayoutAnimated:NO];
         return;
     }
     if (![(UIControl *)container cyl_isPlatterNormalControl]) {
@@ -442,13 +453,13 @@ static const CGFloat kCYLBadgeDefaultRedDotRadius = 4.f;
     ]];
 }
 
-- (void)cyl_updateBadgeOverlayLayout {
+- (void)cyl_updateBadgeOverlayLayoutAnimated:(BOOL)animated {
     if (!CYL_IS_IOS_27) {
         return;
     }
     for (UIView *view in [self.subviews copy]) {
         if ([view isKindOfClass:[CYLTabBarBadgeOverlayView class]]) {
-            [(CYLTabBarBadgeOverlayView *)view updateBadgeLayout];
+            [(CYLTabBarBadgeOverlayView *)view updateBadgeLayoutAnimated:animated];
         }
     }
 }

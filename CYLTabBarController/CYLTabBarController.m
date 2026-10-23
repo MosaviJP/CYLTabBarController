@@ -274,7 +274,7 @@ CGFloat const CYLFlatDesignUITabBarControllerHideShowBarDuration = 0.2;
     [super viewDidLayoutSubviews];
     CYL_IF_NOT_FLATDESIGN_BEGIN     //Not CYLTabBarStyleTypeFlatDesign
     [self.cyl_tabBar layoutSubviews];//Fix issue #93 #392
-    [self.view cyl_updateBadgeOverlayLayout];
+    [self.view cyl_updateBadgeOverlayLayoutAnimated:NO];
     if ([self.cyl_tabBar isKindOfClass:[CYLTabBar class]] ) {
         // add callback for visiable control, included all plusButton.
         CYLTabBar *tabBar = (CYLTabBar *)self.cyl_tabBar;
