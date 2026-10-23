@@ -2,8 +2,8 @@
 //  CYLTabBarController.m
 //  CYLTabBarController
 //
-//  v1.21.x Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
-//  Copyright © 2018 https://github.com/ChenYilong . All rights reserved.
+//  v1.99.x Created by 微博@iOS程序犭袁 ( http://weibo.com/luohanchenyilong/ ) on 10/20/15.
+//  Copyright © 2026 https://github.com/ChenYilong . All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
@@ -13,6 +13,31 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UITabBarItem (CYLTabBarControllerExtention)
 
 @property (nonatomic, readonly) UIControl *cyl_tabButton;
+@property (nonatomic, readonly) UIControl *cyl_selectedTabButton;
+@property (nonatomic, readonly) UIControl *cyl_visiableTabButton;
+@property (nonatomic, strong, getter=cyl_lottieURL, setter=cyl_setLottieURL:) NSURL *cyl_lottieURL;
+
+@property (nonatomic, strong, getter=cyl_lottieSizeValue, setter=cyl_setLottieSizeValue:) NSValue *cyl_lottieSizeValue;
+@property (nonatomic, assign, getter=cyl_imagePositionAdjustment, setter=cyl_setImagePositionAdjustment:) UIOffset cyl_imagePositionAdjustment;
+
+/**
+ * 获取一个UITabBarItem内显示图标的UIImageView，如果找不到则返回nil
+ * [EN] Returns the image view that shows this item's icon, or nil.
+ * [CN] 返回该 Item 用于显示图标的图片视图，找不到时返回 nil。
+ */
+- (nullable UIImageView *)cyl_imageView;
+
+/*!
+ * [EN] Same as `-cyl_imageView`.
+ * [CN] 同 -cyl_imageView。
+ */
+- (nullable UIImageView *)cyl_imageViewInTabBarButton;
+
+/*!
+ * [EN] Returns YES once the item's image view or title label has been laid out (width > 10).
+ * [CN] 判断该 Item 的图片视图或标题 Label 是否已完成布局（宽度大于 10）。
+ */
+- (BOOL)cyl_isReady;
 
 @end
 
