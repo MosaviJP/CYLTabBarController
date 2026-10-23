@@ -96,6 +96,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (UIView *)cyl_findBarButtonContentView;
 
+// 内部使用：布局时关闭角标动画，TabBar 位移或淡入淡出时沿用当前动画。
+- (void)cyl_updateBadgeOverlayLayoutAnimated:(BOOL)animated;
+
 @property (nonatomic, assign, getter=cyl_keepShowingPlusButtonLabel, setter=cyl_setKeepShowingPlusButtonLabel:) BOOL cyl_keepShowingPlusButtonLabel;
 
 @end
